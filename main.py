@@ -1,21 +1,13 @@
 import telebot
 from telebot import types
 import os
+from logs import log_command
 
 os.chdir("/Users/vicedant/Desktop/MIREA_BOT/") 
 
 import pandas as pd
 
 bot = telebot.TeleBot("Token")
-
-# Декоратор для логирования команд
-def log_command(func):
-    def wrapper(message):
-        user_id = message.from_user.id
-        command = message.text
-        print(f"Получена команда: {command} от пользователя с ID: {user_id}")
-        func(message)
-    return wrapper
 
 @bot.message_handler(commands=['start']) 
 @log_command
