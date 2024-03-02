@@ -6,7 +6,7 @@ from database.database import db_file, create_connection, create_users_table, ad
 
 import sqlite3
 os.chdir("/Users/vicedant/Desktop/MIREA_BOT/") 
-bot = telebot.TeleBot("token")
+bot = telebot.TeleBot("6630080242:AAF2fHCKMtoJn6t8UJNgOU6hHtzxZ8LQv_U")
 
 @bot.message_handler(commands=['start']) 
 @log_command
@@ -33,7 +33,7 @@ def send_to_all(message):
         user_ids = get_all_users()
         for user_id in user_ids:
             try:
-                bot.send_message(user_id, text_to_send)
+                bot.send_message(user_id, f"[Объявление] {text_to_send}")
             except Exception as e:
                 print(f"Не удалось отправить сообщение пользователю {user_id}: {e}")
     else:
