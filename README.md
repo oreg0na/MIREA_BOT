@@ -5,5 +5,7 @@
 
 ## Installation
 ```
+https://github.com/oreg0na/MIREA_BOT.git
+cd MIREA_BOT
 pip install telebot, sqlite3
 ```
