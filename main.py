@@ -1,6 +1,10 @@
 import telebot
+from telebot import types
+import mimetypes # С помощью MimeTypes определяем MIME тип для файла .docx
 # import openpyxl
 import docx2txt
+import os
+os.chdir("/Users/vicedant/Desktop/MIREA_BOT/") 
 
 import pandas as pd
 from io import BytesIO
@@ -15,20 +19,31 @@ def start_message(message):
     )
 
 @bot.message_handler(commands=['group'])
-def group_list(message):
-    doc_text = docx2txt.process("resources/group_list.docs")
-    lines = doc_text.split("\n")
+def send_group(message):
+    # Читаем данные из .docx
+    text = docx2txt.process('resources/group_list.docx')
+    
+    # Парсим  
     data = []
-    for line in lines:
-        splits = line.split(":")
+    for line in text.split('\n'):
+        splits = line.split(':')  
         if len(splits) == 2:
-            name, group = splits 
-            data.append({"name": name.strip(), "group": group.strip()})
-    df = pd.DataFrame(data) 
-    with BytesIO() as output:
-        with pd.ExcelWriter(output) as writer:
+            name, group = splits
+            data.append({"name": name, "group": group})
+            
+    df = pd.DataFrame(data)
+
+    with pd.ExcelWriter('group_list.xlsx') as writer: 
+        df.to_excel(writer)
+    
+    writer.close()
+    
+    '''
+    with open('resources/group_list.xlsx', 'wb') as f:  
+        with pd.ExcelWriter(f) as writer:
             df.to_excel(writer)
-        output.seek(0)
-        bot.send_document(message.chat.id, output, filename="resources/group_list.docs") 
+    ''' 
+    doc = open('resources/group_list.xlsx', 'rb')
+    bot.send_document(message.chat.id, doc)
 
 bot.polling()
