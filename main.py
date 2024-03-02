@@ -1,6 +1,5 @@
 import telebot
 from telebot import types
-import docx2txt
 import os
 
 os.chdir("/Users/vicedant/Desktop/MIREA_BOT/") 
