@@ -7,7 +7,6 @@ import os
 os.chdir("/Users/vicedant/Desktop/MIREA_BOT/") 
 
 import pandas as pd
-from io import BytesIO
 
 bot = telebot.TeleBot("Token")
 
