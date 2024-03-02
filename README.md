@@ -9,3 +9,6 @@ https://github.com/oreg0na/MIREA_BOT.git
 cd MIREA_BOT
 pip install telebot, sqlite3
 ```
+
+### Ваши идеи
+[![Telegram](https://img.shields.io/badge/Telegram-blue?style=for-the-badge&logo=Telegram)](https://t.me/svpg16)
