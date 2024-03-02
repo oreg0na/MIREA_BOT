@@ -9,7 +9,7 @@ os.chdir("/Users/vicedant/Desktop/MIREA_BOT/")
 import pandas as pd
 from io import BytesIO
 
-bot = telebot.TeleBot("6630080242:AAF2fHCKMtoJn6t8UJNgOU6hHtzxZ8LQv_U")
+bot = telebot.TeleBot("Token")
 
 @bot.message_handler(commands=['start']) 
 def start_message(message):
