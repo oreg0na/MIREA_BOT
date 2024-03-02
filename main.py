@@ -7,7 +7,7 @@ os.chdir("/Users/vicedant/Desktop/MIREA_BOT/")
 
 import pandas as pd
 
-bot = telebot.TeleBot("6630080242:AAF2fHCKMtoJn6t8UJNgOU6hHtzxZ8LQv_U")
+bot = telebot.TeleBot("Token")
 
 # Декоратор для логирования команд
 def log_command(func):
