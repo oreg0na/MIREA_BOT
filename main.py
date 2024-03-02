@@ -1,7 +1,6 @@
 import telebot
 from telebot import types
 import mimetypes # С помощью MimeTypes определяем MIME тип для файла .docx
-# import openpyxl
 import docx2txt
 import os
 os.chdir("/Users/vicedant/Desktop/MIREA_BOT/") 
@@ -20,29 +19,18 @@ def start_message(message):
 
 @bot.message_handler(commands=['group'])
 def send_group(message):
-    # Читаем данные из .docx
     text = docx2txt.process('resources/group_list.docx')
-    
     # Парсим  
     data = []
     for line in text.split('\n'):
         splits = line.split(':')  
         if len(splits) == 2:
             name, group = splits
-            data.append({"name": name, "group": group})
-            
+            data.append({"name": name, "group": group})     
     df = pd.DataFrame(data)
-
     with pd.ExcelWriter('output/group_list.xlsx') as writer: 
         df.to_excel(writer)
-    
     writer.close()
-    
-    '''
-    with open('resources/group_list.xlsx', 'wb') as f:  
-        with pd.ExcelWriter(f) as writer:
-            df.to_excel(writer)
-    ''' 
     doc = open('output/group_list.xlsx', 'rb')
     bot.send_document(message.chat.id, doc)
 
