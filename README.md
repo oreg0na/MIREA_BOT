@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
 ![SQLite](https://img.shields.io/badge/sqlite-gray?style=for-the-badge&logo=sqlite)
-![TeleBot](https://img.shields.io/badge/telebot-blue?style=for-the-badge&logo=telebot)
+![TeleBot](https://img.shields.io/badge/telebot-rad?style=for-the-badge&logo=telebot)
 
 ## Installation
 ```
