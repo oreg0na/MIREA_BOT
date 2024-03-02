@@ -30,7 +30,7 @@ def start_message(message):
 @log_command
 def send_docx_message(message):
     user_id = message.from_user.id
-    doc_path = "resources/group_list.docx"  # Обновите этот путь до вашего файла .docx
+    doc_path = "resources/group_list.docx"
     with open(doc_path, 'rb') as doc:
         bot.send_document(message.chat.id, doc, caption="Вот список всей группы:")
 
