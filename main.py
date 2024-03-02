@@ -34,7 +34,7 @@ def send_to_all(message):
         user_ids = get_all_users()
         for user_id in user_ids:
             try:
-                bot.send_message(user_id, f"[Объявление] {text_to_send}")
+                bot.send_message(user_id, f"✏️ [Объявление] {text_to_send}")
             except Exception as e:
                 print(f"Не удалось отправить сообщение пользователю {user_id}: {e}")
     else:
