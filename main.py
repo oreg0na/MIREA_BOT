@@ -33,7 +33,7 @@ def send_group(message):
             
     df = pd.DataFrame(data)
 
-    with pd.ExcelWriter('group_list.xlsx') as writer: 
+    with pd.ExcelWriter('output/group_list.xlsx') as writer: 
         df.to_excel(writer)
     
     writer.close()
@@ -43,7 +43,7 @@ def send_group(message):
         with pd.ExcelWriter(f) as writer:
             df.to_excel(writer)
     ''' 
-    doc = open('resources/group_list.xlsx', 'rb')
+    doc = open('output/group_list.xlsx', 'rb')
     bot.send_document(message.chat.id, doc)
 
 bot.polling()
