@@ -1,7 +1,7 @@
 import telebot
 from telebot import types
 import os
-from logs.log import log_command
+from wrapper.log import log_command
 
 os.chdir("/Users/vicedant/Desktop/MIREA_BOT/") 
 
