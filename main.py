@@ -14,11 +14,11 @@ def start_message(message):
 
 @bot.message_handler(commands=['group'])
 def send_group(message):
-    wb = openpyxl.load_workbook('resources/group_list.xlsx') 
+    wb = openpyxl.load_workbook('resources/group_list.docs') 
     sheet = wb.active
     with BytesIO() as output:
         wb.save(output)
         output.seek(0)
-        bot.send_document(message.chat.id, output, filename='resources/group_list.xlsx')
+        bot.send_document(message.chat.id, output, filename='resources/group_list.docs')
 
 bot.polling()
