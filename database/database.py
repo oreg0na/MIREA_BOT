@@ -1,6 +1,7 @@
 import sqlite3
+from config.config import *
 
-db_file = '/Users/vicedant/Desktop/MIREA_BOT/database/users.db'
+db_file = path_db
 
 def create_connection(db_file):
     conn = None

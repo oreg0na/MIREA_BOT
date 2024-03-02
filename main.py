@@ -3,10 +3,12 @@ from telebot import types
 import os
 from wrapper.log import log_command
 from database.database import db_file, create_connection, create_users_table, add_user, get_all_users
+from config.config import *
 
 import sqlite3
-os.chdir("/Users/vicedant/Desktop/MIREA_BOT/") 
-bot = telebot.TeleBot("6630080242:AAF2fHCKMtoJn6t8UJNgOU6hHtzxZ8LQv_U")
+
+os.chdir(path_file) 
+bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=['start']) 
 @log_command
@@ -27,8 +29,7 @@ def send_docx_message(message):
 
 @bot.message_handler(commands=['send'])
 def send_to_all(message):
-    ADMIN_ID = 1975353168
-    if message.from_user.id == ADMIN_ID:
+    if message.from_user.id == admin:
         text_to_send = message.text.replace('/send ', '', 1)
         user_ids = get_all_users()
         for user_id in user_ids:
