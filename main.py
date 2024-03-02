@@ -1,6 +1,5 @@
 import telebot
 from telebot import types
-import mimetypes # С помощью MimeTypes определяем MIME тип для файла .docx
 import docx2txt
 import os
 
