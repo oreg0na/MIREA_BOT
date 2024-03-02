@@ -3,6 +3,7 @@ from telebot import types
 import mimetypes # С помощью MimeTypes определяем MIME тип для файла .docx
 import docx2txt
 import os
+
 os.chdir("/Users/vicedant/Desktop/MIREA_BOT/") 
 
 import pandas as pd
