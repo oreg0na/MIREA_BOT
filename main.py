@@ -1,13 +1,13 @@
 import telebot
 from telebot import types
 import os
-from logs import log_command
+from logs.log import log_command
 
 os.chdir("/Users/vicedant/Desktop/MIREA_BOT/") 
 
 import pandas as pd
 
-bot = telebot.TeleBot("Token")
+bot = telebot.TeleBot("6630080242:AAF2fHCKMtoJn6t8UJNgOU6hHtzxZ8LQv_U")
 
 @bot.message_handler(commands=['start']) 
 @log_command
