@@ -7,9 +7,19 @@ os.chdir("/Users/vicedant/Desktop/MIREA_BOT/")
 
 import pandas as pd
 
-bot = telebot.TeleBot("Token")
+bot = telebot.TeleBot("6630080242:AAF2fHCKMtoJn6t8UJNgOU6hHtzxZ8LQv_U")
+
+# Декоратор для логирования команд
+def log_command(func):
+    def wrapper(message):
+        user_id = message.from_user.id
+        command = message.text
+        print(f"Получена команда: {command} от пользователя с ID: {user_id}")
+        func(message)
+    return wrapper
 
 @bot.message_handler(commands=['start']) 
+@log_command
 def start_message(message):
     bot.send_message(
         message.chat.id,  
@@ -17,20 +27,12 @@ def start_message(message):
     )
 
 @bot.message_handler(commands=['group'])
-def send_group(message):
-    text = docx2txt.process('resources/group_list.docx')
-    # Парсим  
-    data = []
-    for line in text.split('\n'):
-        splits = line.split(':')  
-        if len(splits) == 2:
-            name, group = splits
-            data.append({"name": name, "group": group})     
-    df = pd.DataFrame(data)
-    with pd.ExcelWriter('output/group_list.xlsx') as writer: 
-        df.to_excel(writer)
-    writer.close()
-    doc = open('output/group_list.xlsx', 'rb')
-    bot.send_document(message.chat.id, doc)
+@log_command
+def send_docx_message(message):
+    user_id = message.from_user.id
+    doc_path = "resources/group_list.docx"  # Обновите этот путь до вашего файла .docx
+    with open(doc_path, 'rb') as doc:
+        bot.send_document(message.chat.id, doc, caption="Вот список всей группы:")
 
+print("Бот запущен и готов к работе. Ожидание команд...")
 bot.polling()
