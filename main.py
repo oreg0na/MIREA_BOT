@@ -2,6 +2,7 @@ import telebot
 from telebot import types
 import os
 import sqlite3
+import time
 
 from wrapper.log import log_command
 from database.database import db_file, create_connection, create_users_table, add_user, get_all_users
@@ -14,9 +15,14 @@ bot = telebot.TeleBot(token)
 @log_command
 def start_message(message):
     add_user(message.from_user.id)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btn_group = types.KeyboardButton("Список группы")
+    markup.add(btn_group)
+
     bot.send_message(
         message.chat.id,  
-        "📌 Добро пожаловать, дорогие студенты группы ЭФБО-07-23! Я бот, созданный чтобы облегчить ваше взаимодействие и учебу. Вы можете использовать следующие команды: \n\n1️⃣/group - получить список группы"
+        "📌 Добро пожаловать, дорогие студенты группы ЭФБО-07-23! Я бот, созданный чтобы облегчить ваше взаимодействие и учебу. Вы можете использовать следующие команды:",
+        reply_markup=markup
     )
 
 @bot.message_handler(commands=['group'])
@@ -26,6 +32,14 @@ def send_docx_message(message):
     doc_path = "resources/group_list.docx"
     with open(doc_path, 'rb') as doc:
         bot.send_document(message.chat.id, doc, caption="😁 Вот список всей группы:")
+    pass
+
+@bot.message_handler(func=lambda message: message.text == "Список группы")
+def handle_group_button(message):
+    sent_message = bot.send_message(message.chat.id, "Вызываю команду /group...")
+    time.sleep(1)
+    bot.delete_message(message.chat.id, sent_message.message_id)
+    send_docx_message(message)
 
 @bot.message_handler(commands=['send'])
 def send_to_all(message):
