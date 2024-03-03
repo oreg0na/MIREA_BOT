@@ -1,33 +1,22 @@
 import telebot
-from telebot import types
 import os
 import time
 import subprocess
-import requests
 
 from wrapper.log import log_command
 from database.database import create_users_table, add_user, get_all_users
 from config.config import *
+from keyboard.key import *
+from parse.parsing import get_ip_info
 
 os.chdir(path_file) 
 bot = telebot.TeleBot(token)
-
-
-def get_ip_info(ip_address):
-    url = f"https://ipinfo.io/{ip_address}/json"
-    response = requests.get(url)
-    data = response.json()
-    return data
-
 
 
 @bot.message_handler(commands=['start']) 
 @log_command
 def start_message(message):
     add_user(message.from_user.id)
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    btn_group = types.KeyboardButton("Список группы")
-    btn_ping = types.KeyboardButton("Узнать свой пинг")
     markup.add(btn_group, btn_ping)
 
     bot.send_message(
