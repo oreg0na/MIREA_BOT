@@ -44,7 +44,7 @@ def send_docx_message(message):
     with open(doc_path, 'rb') as doc:
         bot.send_document(message.chat.id, doc, caption="😁 Вот список всей группы:")
     pass
-
+# кнопки
 @bot.message_handler(func=lambda message: message.text == "Список группы")
 def handle_group_button(message):
     sent_message = bot.send_message(message.chat.id, "Вызываю команду /group...")
@@ -52,6 +52,13 @@ def handle_group_button(message):
     bot.delete_message(message.chat.id, sent_message.message_id)
     send_docx_message(message)
 
+@bot.message_handler(func=lambda message: message.text == "Узнать свой пинг")
+def handle_ping_button(message):
+    sent_message = bot.send_message(message.chat.id, "Вызываю команду /ping...")
+    time.sleep(1)
+    bot.delete_message(message.chat.id, sent_message.message_id)
+    ping(message)
+#
 @bot.message_handler(commands=['send'])
 def send_to_all(message):
     if message.from_user.id == admin:
@@ -80,14 +87,6 @@ def process_ping(message):
         bot.send_message(message.chat.id, response_text)
     except Exception as e:
         bot.send_message(message.chat.id, f"Ошибка при выполнении ping: {e}")
-
-
-@bot.message_handler(func=lambda message: message.text == "Узнать свой пинг")
-def handle_ping_button(message):
-    sent_message = bot.send_message(message.chat.id, "Вызываю команду /ping...")
-    time.sleep(1)
-    bot.delete_message(message.chat.id, sent_message.message_id)
-    ping(message)
 
 
 print("Бот запущен и готов к работе. Ожидание команд...")
