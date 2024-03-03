@@ -1,7 +1,6 @@
 import telebot
 from telebot import types
 import os
-import sqlite3
 import time
 
 from wrapper.log import log_command
