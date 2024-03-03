@@ -5,7 +5,7 @@ import sqlite3
 import time
 
 from wrapper.log import log_command
-from database.database import db_file, create_connection, create_users_table, add_user, get_all_users
+from database.database import create_users_table, add_user, get_all_users
 from config.config import *
 
 os.chdir(path_file) 
