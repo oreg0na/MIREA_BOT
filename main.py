@@ -60,6 +60,7 @@ def handle_ping_button(message):
     ping(message)
 #
 @bot.message_handler(commands=['send'])
+@log_command
 def send_to_all(message):
     if message.from_user.id == admin:
         text_to_send = message.text.replace('/send ', '', 1)
@@ -73,8 +74,9 @@ def send_to_all(message):
         bot.reply_to(message, "⛔️ У вас нет доступа к админ-командам")
 
 @bot.message_handler(commands=['ping'])
+@log_command
 def ping(message):
-    bot.send_message(message.chat.id, "Введите IP-адрес, на который нужно выполнить ping:")
+    bot.send_message(message.chat.id, "🔗 Введите IP-адрес, на который нужно выполнить ping:")
     bot.register_next_step_handler(message, process_ping)
 
 def process_ping(message):
@@ -82,13 +84,13 @@ def process_ping(message):
     try:
         output = subprocess.check_output(['ping', '-c', '3', ip_address])
         ip_info = get_ip_info(ip_address)
-        response_text = f"Пинг до {ip_address}:\n\n{output.decode('utf-8')}\n\n"
-        response_text += f"Информация об IP-адресе:\nСтрана: {ip_info.get('country', 'неизвестно')}\nГород: {ip_info.get('city', 'неизвестно')}"
+        response_text = f"⚡️ Пинг до {ip_address}:\n\n{output.decode('utf-8')}\n\n"
+        response_text += f"📍 Информация об IP-адресе:\nСтрана: {ip_info.get('country', 'неизвестно')}\nГород: {ip_info.get('city', 'неизвестно')}"
         bot.send_message(message.chat.id, response_text)
     except Exception as e:
-        bot.send_message(message.chat.id, f"Ошибка при выполнении ping: {e}")
+        bot.send_message(message.chat.id, f"😔 Ошибка при выполнении ping, скорее всего вы указали некорректный IP-адрес")
 
 
 print("Бот запущен и готов к работе. Ожидание команд...")
 create_users_table()
-bot.polling()
+bot.polling(none_stop=True)
