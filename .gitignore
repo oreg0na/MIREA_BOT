@@ -1,3 +1,5 @@
 __pycache__
 database/secret.key
 config/token.json
+database/db/passwords.db
+database/db/users.db
