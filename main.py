@@ -89,12 +89,14 @@ def delete_password(message):
     except ValueError:
         bot.reply_to(message, "Ошибка. Используйте формат: /delpassword [ссылка]")
 
+markup_inline = types.InlineKeyboardMarkup(row_width=2)
+markup_inline.add(btn_group, btn_ping, btn_addpswd)
+
 @bot.message_handler(commands=['start']) 
 @log_command
 def start_message(message):
     add_user(message.from_user.id)
     user_id = message.chat.id
-    markup_inline.add(btn_group, btn_ping, btn_addpswd)
     if not is_keyboard_sent(user_id):
         bot.send_message(
         message.chat.id,  
