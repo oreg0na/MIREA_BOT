@@ -80,8 +80,8 @@ def send_docx_message(message):
     with open(doc_path, 'rb') as doc:
         bot.send_document(message.chat.id, doc, caption="😁 Вот список всей группы:")
     pass
-# кнопки
 '''
+# кнопки
 @bot.message_handler(func=lambda message: message.text == "Список группы")
 def handle_group_button(message):
     sent_message = bot.send_message(message.chat.id, "Вызываю команду /group...")
