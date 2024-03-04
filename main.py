@@ -137,7 +137,7 @@ def process_ping(message):
 
 @bot.message_handler(commands=['ssh-connect'])
 def ssh_connect_start(message):
-    msg = bot.reply_to(message, "Enter SSH details in format: host port username password")
+    msg = bot.reply_to(message, "💣 Введите данные SSH в формате: host port username password")
     bot.register_next_step_handler(msg, process_ssh_connect)
     set_user_state(message.from_user.id, 'ssh_connected')
 
@@ -149,7 +149,7 @@ def process_ssh_connect(message):
         success, response = ssh_connect(*details)
         bot.send_message(message.chat.id, response)
     except Exception as e:
-        bot.reply_to(message, 'Failed to connect. Error: {}'.format(str(e)))
+        bot.reply_to(message, '⛔️ Не удалось подключиться. Error: {}'.format(str(e)))
 
 @bot.message_handler(commands=['ssh-close'])
 def handle_ssh_close(message):
@@ -159,9 +159,9 @@ def handle_ssh_close(message):
 @bot.message_handler(commands=['ssh-cmd'])
 def handle_ssh_cmd_start(message):
     if get_user_state(message.from_user.id) != 'ssh_connected':
-        bot.reply_to(message, "No active SSH connection. Use /ssh-connect to start a new session.")
+        bot.reply_to(message, "📎 Нет активного SSH-соединения. Используйте /ssh-connect для запуска нового сеанса.")
         return
-    msg = bot.reply_to(message, "Enter command to execute:")
+    msg = bot.reply_to(message, "> Введите команду для выполнения:")
     bot.register_next_step_handler(msg, process_ssh_cmd)
 
 def process_ssh_cmd(message):
@@ -176,12 +176,12 @@ def process_ssh_connect(message):
             raise ValueError("Invalid format")
         host, port, username, password = details
         if port != '22':
-            bot.reply_to(message, "Only port 22 is supported. Please try again.")
+            bot.reply_to(message, "⚠️ Поддерживается только порт 22. Пожалуйста, попробуйте снова.")
             return
         success, response = ssh_connect(host, port, username, password)
         bot.send_message(message.chat.id, response)
     except Exception as e:
-        bot.reply_to(message, 'Failed to connect. Error: {}'.format(str(e)))
+        bot.reply_to(message, '⛔️ Не удалось подключиться. Error: {}'.format(str(e)))
 
 @bot.callback_query_handler(func=lambda callback: True)
 def callback_message(callback):
