@@ -20,5 +20,7 @@ pip install telebot, sqlite3
 
 `wrapper` - логирует любые вводы команд пользователями (отображает их в консоль запуска и выводит ID,тег и введенную команду)
 
+`parse` - парсинг страны и города указанного IP-адреса с сайта https://ipinfo.io/
+
 ### Ваши идеи
 [![Telegram](https://img.shields.io/badge/Telegram-blue?style=for-the-badge&logo=Telegram)](https://t.me/svpg16)
