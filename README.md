@@ -22,5 +22,7 @@ pip install telebot, sqlite3
 
 `parse` - парсинг страны и города указанного IP-адреса с сайта https://ipinfo.io/
 
+`keyboard` - все кнопки, которые функционируют в боте
+
 ### Ваши идеи
 [![Telegram](https://img.shields.io/badge/Telegram-blue?style=for-the-badge&logo=Telegram)](https://t.me/svpg16)
