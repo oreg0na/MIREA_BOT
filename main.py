@@ -9,12 +9,14 @@ from database.crypto import conn, cursor, encrypt, decrypt
 from config.config import *
 from keyboard.key import *
 from parse.parsing import get_ip_info
+from ssh.sshconnect import ssh_connect, ssh_close, ssh_cmd, get_user_state, set_user_state
 
 with open(path_token, 'r') as file:
     config = json.load(file)
 
 os.chdir(path_file) 
 bot = telebot.TeleBot(config['token'])
+ssh_client = None
 
 @bot.message_handler(commands=['addpassword'])
 def add_password(message):
@@ -132,6 +134,54 @@ def process_ping(message):
         bot.send_message(message.chat.id, response_text)
     except Exception as e:
         bot.send_message(message.chat.id, f"😔 Ошибка при выполнении ping, скорее всего вы указали некорректный IP-адрес")
+
+@bot.message_handler(commands=['ssh-connect'])
+def ssh_connect_start(message):
+    msg = bot.reply_to(message, "Enter SSH details in format: host port username password")
+    bot.register_next_step_handler(msg, process_ssh_connect)
+    set_user_state(message.from_user.id, 'ssh_connected')
+
+def process_ssh_connect(message):
+    try:
+        details = message.text.split()
+        if len(details) != 4:
+            raise ValueError("Invalid format")
+        success, response = ssh_connect(*details)
+        bot.send_message(message.chat.id, response)
+    except Exception as e:
+        bot.reply_to(message, 'Failed to connect. Error: {}'.format(str(e)))
+
+@bot.message_handler(commands=['ssh-close'])
+def handle_ssh_close(message):
+    response = ssh_close(message.from_user.id)
+    bot.reply_to(message, response)
+
+@bot.message_handler(commands=['ssh-cmd'])
+def handle_ssh_cmd_start(message):
+    if get_user_state(message.from_user.id) != 'ssh_connected':
+        bot.reply_to(message, "No active SSH connection. Use /ssh-connect to start a new session.")
+        return
+    msg = bot.reply_to(message, "Enter command to execute:")
+    bot.register_next_step_handler(msg, process_ssh_cmd)
+
+def process_ssh_cmd(message):
+    command = message.text
+    response = ssh_cmd(command)
+    bot.send_message(message.chat.id, response)
+
+def process_ssh_connect(message):
+    try:
+        details = message.text.split()
+        if len(details) != 4:
+            raise ValueError("Invalid format")
+        host, port, username, password = details
+        if port != '22':
+            bot.reply_to(message, "Only port 22 is supported. Please try again.")
+            return
+        success, response = ssh_connect(host, port, username, password)
+        bot.send_message(message.chat.id, response)
+    except Exception as e:
+        bot.reply_to(message, 'Failed to connect. Error: {}'.format(str(e)))
 
 @bot.callback_query_handler(func=lambda callback: True)
 def callback_message(callback):
