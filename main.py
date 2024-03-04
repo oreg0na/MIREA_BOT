@@ -16,8 +16,7 @@ bot = telebot.TeleBot(token)
 @bot.message_handler(commands=['addpassword'])
 def add_password(message):
     try:
-        # Разбиваем входящее сообщение на части
-        parts = message.text.split(maxsplit=4)  # Разделяем на максимум 4 части, чтобы проверить лишние аргументы
+        parts = message.text.split(maxsplit=4)
         if len(parts) != 4:
             raise ValueError("Неверное количество аргументов.")
         _, url, login, password = parts
