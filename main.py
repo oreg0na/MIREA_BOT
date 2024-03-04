@@ -16,19 +16,25 @@ bot = telebot.TeleBot(token)
 @bot.message_handler(commands=['addpassword'])
 def add_password(message):
     try:
-        _, url, login, password = message.text.split(maxsplit=3)
+        # Разбиваем входящее сообщение на части
+        parts = message.text.split(maxsplit=4)  # Разделяем на максимум 4 части, чтобы проверить лишние аргументы
+        if len(parts) != 4:
+            raise ValueError("Неверное количество аргументов.")
+        _, url, login, password = parts
+        # Проверяем, начинается ли URL с http:// или https://
+        if not (url.startswith('http://') or url.startswith('https://')):
+            raise ValueError("URL должен начинаться с http:// или https://")
         chat_id = message.chat.id
         url_encrypted = encrypt(url)
         login_encrypted = encrypt(login)
         password_encrypted = encrypt(password)
-        
         cursor.execute("INSERT INTO passwords (chat_id, url, login, password_encrypted) VALUES (?, ?, ?, ?)", 
                        (chat_id, url_encrypted, login_encrypted, password_encrypted))
         conn.commit()
-        
-        bot.reply_to(message, "Пароль успешно сохранен.\nДля просмотра всех сохраненных пароль: /listpassword")
-    except ValueError:
-        bot.reply_to(message, "Ошибка. Используйте формат: /addpassword [ссылка] [логин/почта/телефон] [пароль]")
+        bot.reply_to(message, "Пароль успешно сохранен.\nДля просмотра всех сохранённых паролей: /listpasswords")
+    except ValueError as e:
+        bot.reply_to(message, f"Ошибка. {str(e)} Используйте формат: /addpassword [ссылка] [логин/почта/телефон] [пароль]")
+
 
 @bot.message_handler(commands=['listpassword'])
 def list_passwords(message):
