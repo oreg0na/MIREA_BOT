@@ -24,7 +24,6 @@ def load_birthdays():
         data = json.load(file)
     return data['date_group']
 
-os.chdir(path_file) 
 bot = telebot.TeleBot(config["settings"]["token"])
 ssh_client = None
 
