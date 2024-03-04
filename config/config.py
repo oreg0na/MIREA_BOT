@@ -4,4 +4,4 @@ path_db_passwords = '/Users/vicedant/Desktop/MIREA_BOT/database/db/passwords.db'
 path_db_schedule = '/Users/vicedant/Desktop/MIREA_BOT/database/db/schedule.db'
 path_key = '/Users/vicedant/Desktop/MIREA_BOT/database/secret.key'
 path_token = '/Users/vicedant/Desktop/MIREA_BOT/config/token.json'
-admin = 1975353168
+admin, tutor = 1975353168, 1022030123

@@ -2,6 +2,11 @@ import telebot
 import os
 import json
 import subprocess
+from datetime import datetime
+
+# И теперь можно использовать datetime.now()
+today = datetime.now().strftime("%d.%m")
+
 
 from wrapper.log import log_command
 from database.database import create_users_table, add_user, get_all_users
@@ -14,9 +19,24 @@ from ssh.sshconnect import ssh_connect, ssh_close, ssh_cmd, get_user_state, set_
 with open(path_token, 'r') as file:
     config = json.load(file)
 
+def load_birthdays():
+    with open(path_token, 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    return data['date_group']
+
 os.chdir(path_file) 
-bot = telebot.TeleBot(config['token'])
+bot = telebot.TeleBot(config["settings"]["token"])
 ssh_client = None
+
+def check_and_send_birthday_messages():
+    today = datetime.now().strftime("%d.%m")
+    print(today)
+    birthdays_today = [person for person in load_birthdays() if person['birthdate'][:5] == today]
+    
+    for person in birthdays_today:
+        message = f"🎆 Сегодня {today}, день рождение у {person['name']}."
+        bot.send_message(admin, message)
+        print('сообщение о днях рождениях отправлено')
 
 @bot.message_handler(commands=['addpassword'])
 def add_password(message):
@@ -194,4 +214,5 @@ def callback_message(callback):
 
 print("Бот запущен и готов к работе. Ожидание команд...")
 create_users_table()
+check_and_send_birthday_messages()
 bot.polling(none_stop=True)
