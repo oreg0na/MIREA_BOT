@@ -5,6 +5,7 @@ import subprocess
 
 from wrapper.log import log_command
 from database.database import create_users_table, add_user, get_all_users
+from database.crypto import conn, cursor, encrypt, decrypt
 from config.config import *
 from keyboard.key import *
 from parse.parsing import get_ip_info
@@ -12,6 +13,52 @@ from parse.parsing import get_ip_info
 os.chdir(path_file) 
 bot = telebot.TeleBot(token)
 
+@bot.message_handler(commands=['addpassword'])
+def add_password(message):
+    try:
+        _, url, login, password = message.text.split(maxsplit=3)
+        chat_id = message.chat.id
+        url_encrypted = encrypt(url)
+        login_encrypted = encrypt(login)
+        password_encrypted = encrypt(password)
+        
+        cursor.execute("INSERT INTO passwords (chat_id, url, login, password_encrypted) VALUES (?, ?, ?, ?)", 
+                       (chat_id, url_encrypted, login_encrypted, password_encrypted))
+        conn.commit()
+        
+        bot.reply_to(message, "Пароль успешно сохранен.\nДля просмотра всех сохраненных пароль: /listpassword")
+    except ValueError:
+        bot.reply_to(message, "Ошибка. Используйте формат: /addpassword [ссылка] [логин/почта/телефон] [пароль]")
+
+@bot.message_handler(commands=['listpassword'])
+def list_passwords(message):
+    chat_id = message.chat.id
+    cursor.execute("SELECT url, login, password_encrypted FROM passwords WHERE chat_id=?", (chat_id,))
+    passwords = cursor.fetchall()
+    if passwords:
+        response = "Ваши сохраненные данные:\n" + "\n".join([f"Ссылка: {decrypt(url)}, Логин: {decrypt(login)}, Пароль: {decrypt(password_encrypted)}" for url, login, password_encrypted in passwords])
+    else:
+        response = "Сохраненных паролей нет.\nЧтобы добавить пароль используйте: /addpassword"
+    bot.reply_to(message, response)
+
+@bot.message_handler(commands=['delpassword'])
+def delete_password(message):
+    try:
+        _, url_to_delete = message.text.split(maxsplit=1)
+        chat_id = message.chat.id
+        cursor.execute("SELECT rowid, url FROM passwords WHERE chat_id=?", (chat_id,))
+        rows = cursor.fetchall()
+
+        for row in rows:
+            rowid, encrypted_url = row
+            if decrypt(encrypted_url) == url_to_delete:
+                cursor.execute("DELETE FROM passwords WHERE rowid=?", (rowid,))
+                conn.commit()
+                bot.reply_to(message, "Пароль успешно удален.\nДля просмотра всех сохраненных пароль: /listpassword")
+                return
+        bot.reply_to(message, "Пароль не найден.")
+    except ValueError:
+        bot.reply_to(message, "Ошибка. Используйте формат: /delpassword [ссылка]")
 
 @bot.message_handler(commands=['start']) 
 @log_command
