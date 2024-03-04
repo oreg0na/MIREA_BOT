@@ -70,12 +70,12 @@ def delete_password(message):
 @log_command
 def start_message(message):
     add_user(message.from_user.id)
-    markup.add(btn_group, btn_ping, btn_addpswd)
+    markup_inline.add(btn_group, btn_ping, btn_addpswd)
 
     bot.send_message(
         message.chat.id,  
         "📌 Добро пожаловать, дорогие студенты группы ЭФБО-07-23! Я бот, созданный чтобы облегчить ваше взаимодействие и учебу. Вы можете использовать следующие команды:",
-        reply_markup=markup
+        reply_markup=markup_inline
     )
 
 @bot.message_handler(commands=['group'])
@@ -142,6 +142,7 @@ def callback_message(callback):
         send_docx_message(callback.message)
     if callback.data == 'ping':
         ping(callback.message)
+
 print("Бот запущен и готов к работе. Ожидание команд...")
 create_users_table()
 bot.polling(none_stop=True)
