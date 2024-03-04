@@ -13,8 +13,6 @@ from parse.parsing import get_ip_info
 with open(path_token, 'r') as file:
     config = json.load(file)
 
-    test
-
 os.chdir(path_file) 
 bot = telebot.TeleBot(config['token'])
 
