@@ -1,5 +1,6 @@
 from telebot import types
 
-markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-btn_group = types.KeyboardButton("Список группы")
-btn_ping = types.KeyboardButton("Узнать свой пинг")
+markup = types.InlineKeyboardMarkup(row_width=2)
+btn_group = types.InlineKeyboardButton("📃 Список группы", callback_data='group')
+btn_ping = types.InlineKeyboardButton("📍 Узнать свой пинг", callback_data='ping')
+btn_addpswd = types.InlineKeyboardButton("🔐 Добавить пароль", callback_data='addpassword')

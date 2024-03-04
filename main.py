@@ -64,7 +64,7 @@ def delete_password(message):
 @log_command
 def start_message(message):
     add_user(message.from_user.id)
-    markup.add(btn_group, btn_ping)
+    markup.add(btn_group, btn_ping, btn_addpswd)
 
     bot.send_message(
         message.chat.id,  
@@ -81,6 +81,7 @@ def send_docx_message(message):
         bot.send_document(message.chat.id, doc, caption="😁 Вот список всей группы:")
     pass
 # кнопки
+'''
 @bot.message_handler(func=lambda message: message.text == "Список группы")
 def handle_group_button(message):
     sent_message = bot.send_message(message.chat.id, "Вызываю команду /group...")
@@ -95,6 +96,7 @@ def handle_ping_button(message):
     bot.delete_message(message.chat.id, sent_message.message_id)
     ping(message)
 #
+'''
 @bot.message_handler(commands=['send'])
 @log_command
 def send_to_all(message):
@@ -126,7 +128,14 @@ def process_ping(message):
     except Exception as e:
         bot.send_message(message.chat.id, f"😔 Ошибка при выполнении ping, скорее всего вы указали некорректный IP-адрес")
 
-
+@bot.callback_query_handler(func=lambda callback: True)
+def callback_message(callback):
+    if callback.data == 'addpassword':
+        bot.send_message(callback.message.chat.id, 'Используйте формат: /addpassword [ссылка] [логин/почта/телефон] [пароль]')
+    if callback.data == 'group':
+        send_docx_message(callback.message)
+    if callback.data == 'ping':
+        ping(callback.message)
 print("Бот запущен и готов к работе. Ожидание команд...")
 create_users_table()
 bot.polling(none_stop=True)
