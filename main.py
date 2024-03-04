@@ -81,7 +81,6 @@ def start_message(message):
     )
 
 @bot.message_handler(commands=['group'])
-@log_command
 def send_docx_message(message):
     user_id = message.from_user.id
     doc_path = "resources/group_list.docx"
@@ -106,7 +105,6 @@ def handle_ping_button(message):
 #
 '''
 @bot.message_handler(commands=['send'])
-@log_command
 def send_to_all(message):
     if message.from_user.id == admin:
         text_to_send = message.text.replace('/send ', '', 1)
@@ -120,7 +118,6 @@ def send_to_all(message):
         bot.reply_to(message, "⛔️ У вас нет доступа к админ-командам")
 
 @bot.message_handler(commands=['ping'])
-@log_command
 def ping(message):
     bot.send_message(message.chat.id, "🔗 Введите IP-адрес, на который нужно выполнить ping:")
     bot.register_next_step_handler(message, process_ping)
