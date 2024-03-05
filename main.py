@@ -109,7 +109,7 @@ def delete_password(message):
         bot.reply_to(message, "Ошибка. Используйте формат: /delpassword [ссылка]")
 
 markup_inline = types.InlineKeyboardMarkup(row_width=2)
-markup_inline.add(btn_group, btn_ping, btn_addpswd)
+markup_inline.add(btn_group, btn_ping, btn_addpswd, btn_random)
 
 @bot.message_handler(commands=['start']) 
 @log_command
@@ -238,6 +238,8 @@ def callback_message(callback):
         send_docx_message(callback.message)
     if callback.data == 'ping':
         ping(callback.message)
+    if callback.data == 'random':
+        random(callback.message)
 
 print("Бот запущен и готов к работе. Ожидание команд...")
 create_users_table()
