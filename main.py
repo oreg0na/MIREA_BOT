@@ -102,6 +102,7 @@ def start_message(message):
 @bot.message_handler(commands=['random'])
 def random_msg(message):
     user_id = message.chat.id
+    bot.send_message(user_id, 'команда /random в разработке')
 
 @bot.message_handler(commands=['group'])
 def send_docx_message(message):
