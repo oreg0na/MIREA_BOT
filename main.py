@@ -108,7 +108,7 @@ def delete_password(message):
     except ValueError:
         bot.reply_to(message, "Ошибка. Используйте формат: /delpassword [ссылка]")
 
-markup_inline = types.InlineKeyboardMarkup(row_width=2)
+markup_inline = types.InlineKeyboardMarkup(row_width=1)
 markup_inline.add(btn_group, btn_ping, btn_addpswd, btn_random)
 
 @bot.message_handler(commands=['start']) 
