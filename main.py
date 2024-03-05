@@ -2,6 +2,7 @@ import telebot
 import json
 import subprocess
 from datetime import datetime
+import random
 
 from wrapper.log import log_command
 from database.database import create_users_table, add_user, get_all_users
@@ -21,6 +22,29 @@ def load_birthdays():
 
 bot = telebot.TeleBot(config["settings"]["token"])
 ssh_client = None
+user_step = {}
+
+def get_user_step(user_id):
+    if user_id in user_step:
+        return user_step[user_id]
+    else:
+        user_step[user_id] = 0
+        return 0
+
+def process_range_step(message):
+    try:
+        user_step[message.chat.id] = 0
+        range_numbers = message.text.split()
+        if len(range_numbers) != 2:
+            raise ValueError
+        min_num, max_num = int(range_numbers[0]), int(range_numbers[1])
+        if min_num >= max_num:
+            raise ValueError
+        random_number = random.randint(min_num, max_num)
+        bot.reply_to(message, f"Случайное число: {random_number}")
+    except ValueError:
+        msg = bot.reply_to(message, "Пожалуйста введи корректный диапозон чисел (например '1 10')")
+        bot.register_next_step_handler(msg, process_range_step)
 
 def check_and_send_birthday_messages():
     today = datetime.now().strftime("%d.%m")
@@ -99,9 +123,11 @@ def start_message(message):
     )
 
 @bot.message_handler(commands=['random'])
-def random_msg(message):
-    user_id = message.chat.id
-    bot.send_message(user_id, 'команда /random в разработке')
+def random_command(message):
+    msg = bot.reply_to(message, "Введи диапазон чисел через пробел (например '1 10'): ")
+    user_step[message.chat.id] = 1
+    bot.register_next_step_handler(msg, process_range_step)
+
 
 @bot.message_handler(commands=['group'])
 def send_docx_message(message):
