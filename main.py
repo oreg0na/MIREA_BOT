@@ -1,5 +1,4 @@
 import telebot
-import os
 import json
 import subprocess
 from datetime import datetime
