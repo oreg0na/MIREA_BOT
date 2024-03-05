@@ -41,9 +41,9 @@ def process_range_step(message):
         if min_num >= max_num:
             raise ValueError
         random_number = random.randint(min_num, max_num)
-        bot.reply_to(message, f"Случайное число: {random_number}")
+        bot.reply_to(message, f"🆙 Случайное число: {random_number}")
     except ValueError:
-        msg = bot.reply_to(message, "Пожалуйста введи корректный диапозон чисел (например '1 10')")
+        msg = bot.reply_to(message, "❗️ Пожалуйста введи корректный диапозон чисел (например '1 10')")
         bot.register_next_step_handler(msg, process_range_step)
 
 def check_and_send_birthday_messages():
@@ -125,7 +125,7 @@ def start_message(message):
 @bot.message_handler(commands=['random'])
 def random_command(message):
     user_id = message.chat.id
-    msg = bot.reply_to(user_id, "Введи диапазон чисел через пробел (например '1 10'): ")
+    msg = bot.reply_to(user_id, "➡️ Введи диапазон чисел через пробел (например '1 10'): ")
     user_step[message.chat.id] = 1
     bot.register_next_step_handler(msg, process_range_step)
 
