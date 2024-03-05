@@ -4,10 +4,6 @@ import json
 import subprocess
 from datetime import datetime
 
-# И теперь можно использовать datetime.now()
-today = datetime.now().strftime("%d.%m")
-
-
 from wrapper.log import log_command
 from database.database import create_users_table, add_user, get_all_users
 from database.crypto import conn, cursor, encrypt, decrypt
@@ -102,6 +98,10 @@ def start_message(message):
         "📌 Добро пожаловать, дорогие студенты института ИПТИП(МИРЭА)! Я бот, созданный чтобы облегчить ваше взаимодействие и учебу. Вы можете использовать следующие команды:",
         reply_markup=markup_inline
     )
+
+@bot.message_handler(commands=['random'])
+def random_msg(message):
+    user_id = message.chat.id
 
 @bot.message_handler(commands=['group'])
 def send_docx_message(message):
