@@ -108,8 +108,8 @@ def delete_password(message):
     except ValueError:
         bot.reply_to(message, "Ошибка. Используйте формат: /delpassword [ссылка]")
 
-markup_inline = types.InlineKeyboardMarkup(row_width=1)
-markup_inline.add(btn_group, btn_ping, btn_addpswd, btn_random)
+markup_inline = types.InlineKeyboardMarkup(row_width=2)
+markup_inline.add(btn_ping, btn_addpswd, btn_random)
 
 @bot.message_handler(commands=['start']) 
 @log_command
@@ -129,7 +129,7 @@ def random_command(message):
     user_step[message.chat.id] = 1
     bot.register_next_step_handler(msg, process_range_step)
 
-
+'''
 @bot.message_handler(commands=['group'])
 def send_docx_message(message):
     user_id = message.from_user.id
@@ -137,7 +137,7 @@ def send_docx_message(message):
     with open(doc_path, 'rb') as doc:
         bot.send_document(message.chat.id, doc, caption="😁 Вот список всей группы:")
     pass
-'''
+
 # кнопки
 @bot.message_handler(func=lambda message: message.text == "Список группы")
 def handle_group_button(message):
@@ -235,8 +235,6 @@ def process_ssh_connect(message):
 def callback_message(callback):
     if callback.data == 'addpassword':
         bot.send_message(callback.message.chat.id, 'Используйте формат: /addpassword [ссылка] [логин/почта/телефон] [пароль]')
-    if callback.data == 'group':
-        send_docx_message(callback.message)
     if callback.data == 'ping':
         ping(callback.message)
     if callback.data == 'random':
