@@ -124,7 +124,8 @@ def start_message(message):
 
 @bot.message_handler(commands=['random'])
 def random_command(message):
-    msg = bot.reply_to(message, "Введи диапазон чисел через пробел (например '1 10'): ")
+    user_id = message.chat.id
+    msg = bot.reply_to(user_id, "Введи диапазон чисел через пробел (например '1 10'): ")
     user_step[message.chat.id] = 1
     bot.register_next_step_handler(msg, process_range_step)
 
@@ -239,7 +240,7 @@ def callback_message(callback):
     if callback.data == 'ping':
         ping(callback.message)
     if callback.data == 'random':
-        random(callback.message)
+        random_command(callback.message)
 
 print("Бот запущен и готов к работе. Ожидание команд...")
 create_users_table()
