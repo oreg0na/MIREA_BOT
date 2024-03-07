@@ -2,6 +2,7 @@ import telebot
 import json
 import subprocess
 from datetime import datetime
+import time
 import random
 import requests
 from requests.exceptions import ReadTimeout
@@ -25,11 +26,21 @@ def load_birthdays():
 bot = telebot.TeleBot(config["settings"]["token"])
 ssh_client = None
 user_step = {}
+max_attempts, attempt = 36, 0
 
-try:
-    response = requests.get('https://api.telegram.org/bot{token}/getUpdates', timeout=25)
-except ReadTimeout:
-    print("Запрос привысил время ожидания. Попробуйте снова.")
+while attempt < max_attempts:
+    try:
+        response = requests.get('https://api.telegram.org/bot{token}/getUpdates', timeout=25)
+        print(response.json())
+        break
+    except ReadTimeout:
+        print(f"Запрос превысил время ожидания. Попытка {attempt+1} из {max_attempts}. Повторная попытка через 5 минут.")
+        attempt += 1
+        if attempt < max_attempts:
+            time.sleep(300)
+        else:
+            print("Достигнуто максимальное количество попыток. Пожалуйста, попробуйте позже.")
+
 def get_user_step(user_id):
     if user_id in user_step:
         return user_step[user_id]
