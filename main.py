@@ -3,6 +3,8 @@ import json
 import subprocess
 from datetime import datetime
 import random
+import requests
+from requests.exceptions import ReadTimeout
 
 from wrapper.log import log_command
 from database.database import create_users_table, add_user, get_all_users
@@ -24,6 +26,10 @@ bot = telebot.TeleBot(config["settings"]["token"])
 ssh_client = None
 user_step = {}
 
+try:
+    response = requests.get('https://api.telegram.org/bot{token}/getUpdates', timeout=25)
+except ReadTimeout:
+    print("Запрос привысил время ожидания. Попробуйте снова.")
 def get_user_step(user_id):
     if user_id in user_step:
         return user_step[user_id]
