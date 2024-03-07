@@ -15,22 +15,19 @@ from keyboard.key import *
 from parse.parsing import get_ip_info
 from ssh.sshconnect import ssh_connect, ssh_close, ssh_cmd, get_user_state, set_user_state
 
-with open(path_token, 'r') as file:
-    config = json.load(file)
-
 def load_birthdays():
     with open(path_token, 'r', encoding='utf-8') as file:
         data = json.load(file)
     return data['date_group']
 
-bot = telebot.TeleBot(config["settings"]["token"])
+bot = telebot.TeleBot(token)
 ssh_client = None
 user_step = {}
 max_attempts, attempt = 36, 0
 
 while attempt < max_attempts:
     try:
-        response = requests.get('https://api.telegram.org/bot{token}/getUpdates', timeout=25)
+        response = requests.get(f'https://api.telegram.org/bot{token}/getUpdates', timeout=30)
         print(response.json())
         break
     except ReadTimeout:
